@@ -11,6 +11,7 @@
 int main(int argc, char* argv[]){
 	Game game = new_game("Arboria", 900, 600);
 	int offset = 0;
+	Img grass = new_img(game.rend, "assets/tiles/stone.png");
 	Player player = new_player(game.rend, "player", 10);
 	while(game.running){
 		game.frame_start = SDL_GetTicks();
@@ -24,13 +25,9 @@ int main(int argc, char* argv[]){
 			}
 		}
 		control_player(&player, game.keystates);
-		offset++;
-		if(offset > 64){
-			offset = 0;
-		}
 		for(int y = -1; y < 61; y++){
 			for(int x = -1; x < 91; x++){
-				render_img(game.rend, &game.icon, (x * 64) + offset, (y * 64) + offset, 64, 64);
+				render_img(game.rend, &grass, (x * 64) + offset, (y * 64) + offset, 64, 64);
 			}
 		}
 		render_player(game.rend, &player);

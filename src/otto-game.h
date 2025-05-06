@@ -21,6 +21,7 @@ typedef struct {
 
 Img new_img(SDL_Renderer* rend, char* filename);
 Img new_cropped_img(SDL_Renderer* rend, char* file, int x, int y, int w, int h);
+Img new_recolored_img(SDL_Renderer* rend, char* file, SDL_Color target, SDL_Color replace);
 void render_img(SDL_Renderer* rend, Img* img, int x, int y, int w, int h);
 
 ///////////////////

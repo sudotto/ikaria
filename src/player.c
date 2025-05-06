@@ -32,14 +32,14 @@ Player new_player(SDL_Renderer* rend, char* name, float walk_spd){
 
 	char* filenames[ANIM_COUNT] = {
 		"/idle.png",
-		"/idle.png"
+		"/walk.png"
 	};
 
 	for(int anim = 0; anim < ANIM_COUNT; anim++){
 		for(int facing = 0; facing < 4; facing++){
 			strcpy(filepath, dirname);
 			strcat(filepath, filenames[anim]);
-			player.anims[anim][facing] = new_anim(rend, filepath, 4, facing, 32 * 10, 32 * 10);
+			player.anims[anim][facing] = new_anim(rend, filepath, 4, facing, 16 * 10, 16 * 10);
 		}
 	}
 
@@ -51,7 +51,6 @@ Player new_player(SDL_Renderer* rend, char* name, float walk_spd){
 }
 
 void control_player(Player* player, const bool* keystates){
-	player->anim = IDLE;
 	if(keystates[SDL_SCANCODE_W]){
 		player->facing = UP;
 		player->y_vel = -player->walk_spd;
@@ -72,7 +71,6 @@ void control_player(Player* player, const bool* keystates){
 }
 
 void move_player(Player* player){
-	printf("%f\n",player->x_vel);
 	int friction = 1;
 
 	player->y += player->y_vel;
@@ -91,6 +89,12 @@ void move_player(Player* player){
 		player->x_vel -= 1;
 	} else {
 		player->x_vel = 0;
+	}
+
+	if(player->x_vel != 0 || player->y_vel != 0){
+		player->anim = WALK;
+	} else {
+		player->anim = IDLE;
 	}
 }
 

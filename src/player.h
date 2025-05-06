@@ -10,8 +10,8 @@
 typedef enum {
 	UP,
 	DOWN,
-	LEFT,
 	RIGHT,
+	LEFT,
 } Facing;
 
 typedef enum {

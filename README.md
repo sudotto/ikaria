@@ -9,6 +9,13 @@ i started making arboria after i realized i can make games that
 - start project with the library as a base
 - make player
 - make world
+- tiles:
+    - grass
+    - stone
+    - sand
+    - water
+    - basalt
+    - lava
 
 ## doing:
 

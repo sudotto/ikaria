@@ -34,6 +34,25 @@ Img new_cropped_img(SDL_Renderer* rend, char* file, int x, int y, int w, int h){
 	return img;
 }
 
+Img new_recolored_img(SDL_Renderer* rend, char* file, SDL_Color target, SDL_Color replace){
+	Img img;
+	img.surf = IMG_Load(file);
+	const SDL_PixelFormatDetails *format_details = SDL_GetPixelFormatDetails(img.surf->format);
+
+	Uint32 replaceRGB = SDL_MapRGB(format_details, NULL, replace.r, replace.g, replace.b);
+	Uint32 targetRGB = SDL_MapRGB(format_details, NULL, target.r, target.g, target.b);
+	Uint32 *pixels = img.surf->pixels;
+	int total = img.surf->w * img.surf->h;
+	for(int i = 0; i < total; i++){
+		if(pixels[i] == targetRGB){
+			pixels[i] = replaceRGB;
+		}
+	}
+	img.cropped = false;
+	img.tex = SDL_CreateTextureFromSurface(rend, img.surf);
+	return img;
+}
+
 void render_img(SDL_Renderer* rend, Img *img, int x, int y, int w, int h){
 	SDL_FRect dest;
 	dest.x = x;
@@ -68,9 +87,16 @@ void render_anim(SDL_Renderer* rend, Anim* anim, int x, int y, int w, int h, flo
 	if(anim->frame >= anim->framecount){
 		anim->frame = 0;
 	}
-	Img test = new_img(rend, "assets/frank/idle.png");
 	int frame = (int)floor(anim->frame);
-	//printf("%i\n", frame);
+	render_img(rend, &anim->frames[(int)floor(anim->frame)], x, y, w, h);
+}
+
+void play_anim(SDL_Renderer* rend, Anim* anim, int x, int y, int w, int h, float framerate){
+	anim->frame += framerate;
+	if(anim->frame >= anim->framecount){
+		anim->frame = 0;
+	}
+	int frame = (int)floor(anim->frame);
 	render_img(rend, &anim->frames[frame], x, y, w, h);
 }
 
