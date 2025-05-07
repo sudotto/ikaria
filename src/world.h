@@ -32,6 +32,7 @@ extern Tile_data tile_data_table[TILE_TYPE_COUNT];
 
 typedef struct {
 	Tile_data data;
+	Tile_type type;
 	Img sprite;
 	Anim anim;
 } Tile;
