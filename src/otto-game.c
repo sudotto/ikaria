@@ -11,6 +11,14 @@
 #include "otto-game.h"
 
 ///////////////////
+// UTILITY
+///////////////////
+
+int gen_rand(int min, int max){
+	return rand() % (max - min + 1);
+}
+
+///////////////////
 // IMAGE
 ///////////////////
 
@@ -66,6 +74,19 @@ void render_img(SDL_Renderer* rend, Img *img, int x, int y, int w, int h){
 	}
 }
 
+void render_img_rotated(SDL_Renderer* rend, Img *img, int x, int y, int w, int h, int angle){
+	SDL_FRect dest;
+	dest.x = x;
+	dest.y = y;
+	dest.w = w;
+	dest.h = h;
+	if(img->cropped){
+		SDL_RenderTextureRotated(rend, img->tex, &img->crop, &dest, angle, NULL, SDL_FLIP_NONE);
+	} else {
+		SDL_RenderTextureRotated(rend, img->tex, NULL, &dest, angle, NULL, SDL_FLIP_NONE);
+	}
+}
+
 ///////////////////
 // ANIMATION
 ///////////////////
@@ -91,15 +112,6 @@ void render_anim(SDL_Renderer* rend, Anim* anim, int x, int y, int w, int h, flo
 	render_img(rend, &anim->frames[(int)floor(anim->frame)], x, y, w, h);
 }
 
-void play_anim(SDL_Renderer* rend, Anim* anim, int x, int y, int w, int h, float framerate){
-	anim->frame += framerate;
-	if(anim->frame >= anim->framecount){
-		anim->frame = 0;
-	}
-	int frame = (int)floor(anim->frame);
-	render_img(rend, &anim->frames[frame], x, y, w, h);
-}
-
 void del_anim(Anim* anim){
 	free(anim->frames);
 }
@@ -120,8 +132,7 @@ Game new_game(char* title, int w, int h){
 	SDL_SetWindowIcon(game.win, game.icon.surf);
 
 	game.keystates = SDL_GetKeyboardState(NULL);
-	game.mouse_x;
-	game.mouse_y;
+	game.mousestates = SDL_GetMouseState(&game.mouse_x, &game.mouse_y);
 	SDL_HideCursor();
 
 	game.frame_start;
@@ -129,8 +140,8 @@ Game new_game(char* title, int w, int h){
 	return game;
 }
 
-void cap_game_framerate(Uint8 fps, Uint32 frame_start){
-	Uint32 frame_time = SDL_GetTicks() - frame_start;
+void cap_game_framerate(Game* game, Uint8 fps){
+	Uint32 frame_time = SDL_GetTicks() - game->frame_start;
 	if(frame_time < 1000/fps){
 		SDL_Delay(1000/fps - frame_time);
 	}
@@ -138,7 +149,7 @@ void cap_game_framerate(Uint8 fps, Uint32 frame_start){
 
 bool get_game_events(Game* game){
 	game->keystates = SDL_GetKeyboardState(NULL);
-	SDL_GetMouseState(&game->mouse_x, &game->mouse_y);
+	game->mousestates = SDL_GetMouseState(&game->mouse_x, &game->mouse_y);
 	if(SDL_PollEvent(&game->event)){
 		return true;
 	}
