@@ -7,6 +7,7 @@
 
 #include "otto-game.h"
 
+#define WORLD_SIZE 32
 #define TILE_TYPE_COUNT 5
 
 // TILE TYPES
@@ -35,17 +36,17 @@ typedef struct {
 	Anim anim;
 } Tile;
 
-Tile new_tile(SDL_Renderer* rend, Tile_type type);
-void render_tile(SDL_Renderer* rend, Tile* tile, int x, int y);
+Tile new_tile(Game* game, Tile_type type);
+void render_tile(Game* game, Tile* tile, int x, int y);
 
 // WORLD
 
 typedef struct {
 	char* name;
-	Tile tiles[64][64];
+	Tile tiles[WORLD_SIZE][WORLD_SIZE];
 } World;
 
-World new_world(SDL_Renderer* rend, char* name);
-void render_world(SDL_Renderer* rend, World* world);
+World new_world(Game* game, char* name);
+void render_world(Game* game, World* world);
 
 #endif

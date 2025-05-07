@@ -12,7 +12,7 @@
 
 #include "player.h"
 
-Player new_player(SDL_Renderer* rend, char* name, float walk_spd){
+Player new_player(Game* game, char* name, float walk_spd){
 	Player player;
 	player.x = 10;
 	player.y = 10;
@@ -39,7 +39,7 @@ Player new_player(SDL_Renderer* rend, char* name, float walk_spd){
 		for(int facing = 0; facing < 4; facing++){
 			strcpy(filepath, dirname);
 			strcat(filepath, filenames[anim]);
-			player.anims[anim][facing] = new_anim(rend, filepath, 4, facing, 16 * 10, 16 * 10);
+			player.anims[anim][facing] = new_anim(game->rend, filepath, 4, facing, 16 * 10, 16 * 10);
 		}
 	}
 
@@ -50,20 +50,20 @@ Player new_player(SDL_Renderer* rend, char* name, float walk_spd){
 	return player;
 }
 
-void control_player(Player* player, const bool* keystates){
-	if(keystates[SDL_SCANCODE_W]){
+void control_player(Game* game, Player* player){
+	if(game->keystates[SDL_SCANCODE_W]){
 		player->facing = UP;
 		player->y_vel = -player->walk_spd;
 	}
-	if(keystates[SDL_SCANCODE_A]){
+	if(game->keystates[SDL_SCANCODE_A]){
 		player->facing = LEFT;
 		player->x_vel = -player->walk_spd;
 	}
-	if(keystates[SDL_SCANCODE_S]){
+	if(game->keystates[SDL_SCANCODE_S]){
 		player->facing = DOWN;
 		player->y_vel = player->walk_spd;
 	}
-	if(keystates[SDL_SCANCODE_D]){
+	if(game->keystates[SDL_SCANCODE_D]){
 		player->facing = RIGHT;
 		player->x_vel = player->walk_spd;
 	}
@@ -98,6 +98,6 @@ void move_player(Player* player){
 	}
 }
 
-void render_player(SDL_Renderer* rend, Player* player){
-	render_anim(rend, &player->anims[player->anim][player->facing], player->x, player->y, player->w, player->h, 0.1);
+void render_player(Game* game, Player* player){
+	render_anim(game->rend, &player->anims[player->anim][player->facing], player->x, player->y, player->w, player->h, 0.1, true);
 }

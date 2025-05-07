@@ -19,6 +19,12 @@ int gen_rand(int min, int max){
 }
 
 ///////////////////
+// CAMERA
+///////////////////
+
+Camera camera = {0, 0};
+
+///////////////////
 // IMAGE
 ///////////////////
 
@@ -61,10 +67,14 @@ Img new_recolored_img(SDL_Renderer* rend, char* file, SDL_Color target, SDL_Colo
 	return img;
 }
 
-void render_img(SDL_Renderer* rend, Img *img, int x, int y, int w, int h){
+void render_img(SDL_Renderer* rend, Img *img, int x, int y, int w, int h, bool camera_affected){
 	SDL_FRect dest;
 	dest.x = x;
 	dest.y = y;
+	if(camera_affected){
+		dest.x -= camera.x;
+		dest.y -= camera.y;
+	}
 	dest.w = w;
 	dest.h = h;
 	if(img->cropped){
@@ -74,10 +84,10 @@ void render_img(SDL_Renderer* rend, Img *img, int x, int y, int w, int h){
 	}
 }
 
-void render_img_rotated(SDL_Renderer* rend, Img *img, int x, int y, int w, int h, int angle){
+void render_img_rotated(SDL_Renderer* rend, Img *img, int x, int y, int w, int h, int angle, bool camera_affected){
 	SDL_FRect dest;
-	dest.x = x;
-	dest.y = y;
+	dest.x = x - camera.x;
+	dest.y = y - camera.y;
 	dest.w = w;
 	dest.h = h;
 	if(img->cropped){
@@ -103,13 +113,13 @@ Anim new_anim(SDL_Renderer* rend, char* filename, int framecount, int row, int w
 	return anim;
 }
 
-void render_anim(SDL_Renderer* rend, Anim* anim, int x, int y, int w, int h, float framerate){
+void render_anim(SDL_Renderer* rend, Anim* anim, int x, int y, int w, int h, float framerate, bool camera_affected){
 	anim->frame += framerate;
 	if(anim->frame >= anim->framecount){
 		anim->frame = 0;
 	}
 	int frame = (int)floor(anim->frame);
-	render_img(rend, &anim->frames[(int)floor(anim->frame)], x, y, w, h);
+	render_img(rend, &anim->frames[(int)floor(anim->frame)], x, y, w, h, camera_affected);
 }
 
 void del_anim(Anim* anim){
@@ -157,7 +167,7 @@ bool get_game_events(Game* game){
 }
 
 void render_game_cursor(Game* game, int w, int h){
-	render_img(game->rend, &game->cursor, game->mouse_x, game->mouse_y, w, h);
+	render_img(game->rend, &game->cursor, game->mouse_x, game->mouse_y, w, h, false);
 }
 
 void clear_game(Game* game, Uint8 r, Uint8 g, Uint8 b){

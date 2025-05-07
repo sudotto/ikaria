@@ -33,9 +33,9 @@ typedef struct {
 	int walk_spd;
 } Player;
 
-Player new_player(SDL_Renderer* rend, char* name, float walk_spd);
-void control_player(Player* player, const bool* keystates);
+Player new_player(Game* game, char* name, float walk_spd);
+void control_player(Game* game, Player* player);
 void move_player(Player* player);
-void render_player(SDL_Renderer* rend, Player* player);
+void render_player(Game* game, Player* player);
 
 #endif
