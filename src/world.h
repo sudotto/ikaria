@@ -48,6 +48,7 @@ typedef struct {
 } World;
 
 World new_world(Game* game, char* name);
+void set_world_tile(World* world, int x, int y, Tile tile);
 void render_world(Game* game, World* world);
 
 #endif

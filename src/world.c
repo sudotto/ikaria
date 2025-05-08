@@ -42,23 +42,73 @@ void render_tile(Game* game, Tile* tile, int x, int y){
 }
 
 // WORLD
+void generate_blob(Game* game, World* world, Tile_type type, int size, int start_x, int start_y){
+	Tile tile = new_tile(game, type);
+	int scatter = 1;
+	int x = start_x;
+	int y = start_y;
+	for(int i = 0; i < size; i++){
+		set_world_tile(world, x, y, tile);
+		set_world_tile(world, x-scatter, y, tile);
+		set_world_tile(world, x+scatter, y, tile);
+		set_world_tile(world, x, y-scatter, tile);
+		set_world_tile(world, x, y+scatter, tile);
+		int direction = gen_rand(0,4);
+		switch(direction){
+			case 0:
+				y -= scatter;
+				break;
+			case 1:
+				x += scatter;
+				break;
+			case 2:
+				y += scatter;
+				break;
+			case 3:
+				x -= scatter;
+				break;
+		}
+		if(x < 0 || y < 0 || x > WORLD_SIZE - 1 || y > WORLD_SIZE - 1){
+			x = start_x;
+			y = start_y;
+		}
+	}
+}
 
 World new_world(Game* game, char* name){
 	World world;
 	world.name = name;
-	float frequency = 0.001;
-	float amplitude = 10;
-	float offset = 50.0;
+	Tile default_tile = new_tile(game, TILE_WATER); 
 	for(int y = 0; y < WORLD_SIZE; y++){
 		for(int x = 0; x < WORLD_SIZE; x++){
-			float wave_x = sin(x + gen_rand(0,1) * frequency);
-			float wave_y = sin(y + gen_rand(0,1) * frequency);
-			int value = amplitude * (wave_x + wave_y) + offset;
-			value = value % (4 - 0 + 1);
-			world.tiles[y][x] = new_tile(game, value);
+			world.tiles[y][x] = default_tile;
+		}
+	}
+	int land_count = 20;
+	int land_size = 20;
+	for(int i = 0; i < land_count; i++){
+		generate_blob(game, &world, TILE_GRASS, land_size, gen_rand(0, WORLD_SIZE), gen_rand(0, WORLD_SIZE));
+	}
+	Tile sand = new_tile(game, TILE_SAND);
+	for(int y = 0; y < WORLD_SIZE; y++){
+		for(int x = 0; x < WORLD_SIZE; x++){
+			if(world.tiles[y][x].type == TILE_WATER){
+				if( world.tiles[y - 1][x].type == TILE_GRASS ||
+					world.tiles[y][x + 1].type == TILE_GRASS ||
+					world.tiles[y + 1][x].type == TILE_GRASS ||
+					world.tiles[y][x - 1].type == TILE_GRASS){
+					world.tiles[y][x] = sand;
+				}
+			}
 		}
 	}
 	return world;
+}
+
+void set_world_tile(World* world, int x, int y, Tile tile){
+	if(x > 0 && y > 0 && x < WORLD_SIZE && y < WORLD_SIZE){
+		world->tiles[y][x] = tile;
+	}
 }
 
 void render_world(Game* game, World* world){
