@@ -7,7 +7,7 @@
 
 #include "otto-game.h"
 
-#define WORLD_SIZE 32
+#define WORLD_SIZE 128
 #define TILE_TYPE_COUNT 5
 
 // TILE TYPES

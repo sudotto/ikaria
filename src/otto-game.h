@@ -21,6 +21,7 @@ int gen_rand(int min, int max);
 typedef struct {
 	int x;
 	int y;
+	float scale;
 } Camera;
 
 extern Camera camera;

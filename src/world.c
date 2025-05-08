@@ -114,13 +114,10 @@ void set_world_tile(World* world, int x, int y, Tile tile){
 void render_world(Game* game, World* world){
 	for(int y = 0; y < WORLD_SIZE; y++){
 		for(int x = 0; x < WORLD_SIZE; x++){
-			if( x + 16 > camera.x / 64 &&
-				y + 16 > camera.y / 64 &&
-				x - 16 < (900 + camera.x) / 64 &&
-				y - 16 < (600 + camera.y) / 64
-			){
-				render_tile(game, &world->tiles[y][x], x, y);
-			}
+			render_tile(game, &world->tiles[y][x], x, y);
 		}
 	}
 }
+
+// * camera.scale
+// * camera.scale

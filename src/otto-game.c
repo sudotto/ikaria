@@ -9,6 +9,7 @@
 #include <SDL3_image/SDL_image.h>
 
 #include "otto-game.h"
+#include "otto-game_info.h"
 
 ///////////////////
 // UTILITY
@@ -22,7 +23,7 @@ int gen_rand(int min, int max){
 // CAMERA
 ///////////////////
 
-Camera camera = {0, 0};
+Camera camera = {0, 0, 0.5};
 
 ///////////////////
 // IMAGE
@@ -71,12 +72,19 @@ void render_img(SDL_Renderer* rend, Img *img, int x, int y, int w, int h, bool c
 	SDL_FRect dest;
 	dest.x = x;
 	dest.y = y;
+	dest.w = w;
+	dest.h = h;
 	if(camera_affected){
 		dest.x -= camera.x;
 		dest.y -= camera.y;
+		dest.x *= camera.scale;
+		dest.y *= camera.scale;
+		dest.w *= camera.scale;
+		dest.h *= camera.scale;
 	}
-	dest.w = w;
-	dest.h = h;
+	if(x < 0 && y < 0 && x > GAME_W && y > GAME_H){
+		return;
+	}
 	if(img->cropped){
 		SDL_RenderTexture(rend, img->tex, &img->crop, &dest);
 	} else {

@@ -29,8 +29,8 @@ int main(int argc, char* argv[]){
 			}
 		}
 		control_player(&game, &player);
-		camera.x = (player.x + player.w) - (900 / 2);
-		camera.y = (player.y + player.h) - (600 / 2);
+		camera.x = ((player.x + player.w) - ((900 / 2) / camera.scale));
+		camera.y = ((player.y + player.h) - ((600 / 2) / camera.scale));
 		render_world(&game, &world);
 		render_player(&game, &player);
 		
