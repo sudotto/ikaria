@@ -6,7 +6,7 @@
 #include "otto-game.h"
 #include "world.h"
 
-#define ANIM_COUNT 2
+#define ANIM_COUNT 3
 
 typedef enum {
 	UP,
@@ -18,6 +18,7 @@ typedef enum {
 typedef enum {
 	IDLE,
 	WALK,
+	SWIM,
 } Curr_anim;
 
 typedef struct {
@@ -32,6 +33,7 @@ typedef struct {
 	float x_vel;
 	float y_vel;
 	int walk_spd;
+	int swim_spd;
 } Player;
 
 Player new_player(Game* game, char* name, float walk_spd);
