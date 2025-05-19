@@ -28,12 +28,13 @@ int main(int argc, char* argv[]){
 					break;
 			}
 		}
-		control_player(&game, &player);
+		control_player(&game, &player, &world);
 		camera.x = ((player.x + player.w) - ((900 / 2) / camera.scale));
 		camera.y = ((player.y + player.h) - ((600 / 2) / camera.scale));
+
 		render_world(&game, &world);
 		render_player(&game, &player);
-		
+
 		render_game_cursor(&game, 32, 32);
 		update_game(&game);
 		cap_game_framerate(&game, 60);

@@ -23,21 +23,21 @@ Tile new_tile(Game* game, Tile_type type){
 	tile.type = type;
 	tile.data = tile_data_table[type];
 	if(tile.data.animated){
-		tile.anim = new_anim(game->rend, tile.data.filename, 4, 0, 180, 180);
+		tile.anim = new_anim(game->rend, tile.data.filename, 4, 0, 180, 180, true);
 	} else {
-		tile.sprite = new_img(game->rend, tile.data.filename);
+		tile.sprite = new_img(game->rend, tile.data.filename, true);
 	}
 	return tile;
 }
 
 void render_tile(Game* game, Tile* tile, int x, int y){
-	x *= 15*4;
-	y *= 15*4;
-	int size = 18 * 4;
+	x *= 16*4;
+	y *= 16*4;
+	int size = 16*4;
 	if(tile->data.animated){
-		render_anim(game->rend, &tile->anim, x, y, size, size, 0.1, true);
+		render_anim(game->rend, &tile->anim, x, y, size, size, 0.1);
 	} else {
-		render_img(game->rend, &tile->sprite, x, y, size, size, true);
+		render_img(game->rend, &tile->sprite, x, y, size, size);
 	}
 }
 
@@ -84,8 +84,8 @@ World new_world(Game* game, char* name){
 			world.tiles[y][x] = default_tile;
 		}
 	}
-	int land_count = 20;
-	int land_size = 20;
+	int land_count = 1 * WORLD_SIZE;
+	int land_size = 1 * WORLD_SIZE;
 	for(int i = 0; i < land_count; i++){
 		generate_blob(game, &world, TILE_GRASS, land_size, gen_rand(0, WORLD_SIZE), gen_rand(0, WORLD_SIZE));
 	}
@@ -118,6 +118,3 @@ void render_world(Game* game, World* world){
 		}
 	}
 }
-
-// * camera.scale
-// * camera.scale

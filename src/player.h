@@ -4,6 +4,7 @@
 #include <stdbool.h>
 
 #include "otto-game.h"
+#include "world.h"
 
 #define ANIM_COUNT 2
 
@@ -34,8 +35,8 @@ typedef struct {
 } Player;
 
 Player new_player(Game* game, char* name, float walk_spd);
-void control_player(Game* game, Player* player);
-void move_player(Player* player);
+void control_player(Game* game, Player* player, World* world);
+void update_player(Game* game, Player* player, World* world);
 void render_player(Game* game, Player* player);
 
 #endif
