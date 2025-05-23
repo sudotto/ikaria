@@ -21,8 +21,8 @@ Player new_player(Game* game, char* name, float walk_spd){
 	player.h = 64;
 	player.x_vel = 0;
 	player.y_vel = 0;
-	player.walk_spd = 5;
-	player.swim_spd = 2;
+	player.walk_spd = 2;
+	player.swim_spd = 1;
 	player.facing = DOWN;
 	char* dirname = malloc(sizeof(char) * 20);
 	strcpy(dirname, "assets/");
@@ -101,7 +101,7 @@ void control_player(Game* game, Player* player, World* world){
 }
 
 void update_player(Game* game, Player* player, World* world){
-	player->y += player->y_vel;
+	player->y += player->y_vel * 4;
 	if(player->y_vel < 0){
 		player->y_vel += 1;
 	} else if(player->y_vel > 0){
@@ -110,7 +110,7 @@ void update_player(Game* game, Player* player, World* world){
 		player->y_vel = 0;
 	}
 
-	player->x += player->x_vel;
+	player->x += player->x_vel * 4;
 	if(player->x_vel < 0){
 		player->x_vel += 1;
 	} else if(player->x_vel > 0){

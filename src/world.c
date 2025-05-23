@@ -23,7 +23,7 @@ Tile new_tile(Game* game, Tile_type type){
 	tile.type = type;
 	tile.data = tile_data_table[type];
 	if(tile.data.animated){
-		tile.anim = new_anim(game->rend, tile.data.filename, 4, 0, 180, 180, true);
+		tile.anim = new_anim(game->rend, tile.data.filename, 4, 0, 160, 160, true);
 	} else {
 		tile.sprite = new_img(game->rend, tile.data.filename, true);
 	}
