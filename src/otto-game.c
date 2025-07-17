@@ -168,11 +168,11 @@ void del_anim(Anim* anim){
 // GAME
 ///////////////////
 
-Game new_game(char* title, int w, int h){
+Game new_game(char* title){
 	Game game;
 
 	SDL_Init(SDL_INIT_VIDEO);
-	game.win = SDL_CreateWindow(title, w, h, 0);
+	game.win = SDL_CreateWindow(title, GAME_W, GAME_H, 0);
 	game.rend = SDL_CreateRenderer(game.win, NULL);
 
 	game.icon = new_img(game.rend, "assets/icon.png", false);
@@ -198,6 +198,7 @@ void cap_game_framerate(Game* game, Uint8 fps){
 bool get_game_events(Game* game){
 	game->keystates = SDL_GetKeyboardState(NULL);
 	game->mousestates = SDL_GetMouseState(&game->mouse_x, &game->mouse_y);
+
 	if(SDL_PollEvent(&game->event)){
 		return true;
 	}

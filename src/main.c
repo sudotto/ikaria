@@ -8,15 +8,10 @@
 #include <SDL3_image/SDL_image.h>
 
 #include "otto-game.h"
-#include "world.h"
-#include "player.h"
 
 int main(int argc, char* argv[]){
 	srand(time(0));
-	Game game = new_game("Arboria", 900, 600);
-	int offset = 0;
-	World world = new_world(&game, "AHHHHHH");
-	Player player = new_player(&game, "player", 10);
+	Game game = new_game("");
 	while(game.running){
 		game.frame_start = SDL_GetTicks();
 		clear_game(&game, 0, 0, 255);
@@ -28,14 +23,10 @@ int main(int argc, char* argv[]){
 					break;
 			}
 		}
-		control_player(&game, &player, &world);
-		camera.x = ((player.x + player.w) - ((900 / 2) / camera.scale));
-		camera.y = ((player.y + player.h) - ((600 / 2) / camera.scale));
 
-		render_world(&game, &world);
-		render_player(&game, &player);
 
-		render_game_cursor(&game, 32, 32);
+
+		render_game_cursor(&game, 64, 64);
 		update_game(&game);
 		cap_game_framerate(&game, 60);
 	}

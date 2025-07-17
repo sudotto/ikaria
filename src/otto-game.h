@@ -102,7 +102,7 @@ typedef struct {
 	bool running;
 } Game;
 
-Game new_game(char* title, int w, int h);
+Game new_game(char* title);
 void cap_game_framerate(Game* game, Uint8 fps);
 bool get_game_events(Game* game);
 void render_game_cursor(Game* game, int w, int h);
